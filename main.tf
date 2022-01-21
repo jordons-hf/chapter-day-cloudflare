@@ -51,3 +51,26 @@ resource "cloudflare_record" "vercel_txt" {
   proxied = false
 }
 # </DNS Config>
+
+# </Page rules>
+resource "cloudflare_page_rule" "well-known" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  target = "*.${data.cloudflare_zones.domain.zones[0].name}/.well-known/*"
+  priority = 2
+
+  actions {
+    ssl = "off"
+  }
+}
+
+resource "cloudflare_page_rule" "gotta-cache-em-all_com" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  target = "*${data.cloudflare_zones.domain.zones[0].name}/*"
+  priority = 1
+
+  actions {
+    cache_level    = "aggressive"
+    edge_cache_ttl = 7200
+  }
+}
+# </Page rules>
