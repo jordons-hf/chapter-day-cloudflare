@@ -207,6 +207,11 @@ function Home({ data }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
+  // Force cache control
+  context.res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=600, stale-while-revalidate=599"
+  );
   // Fetch data from external API
   const data = await Promise.resolve({
     message: JSON.stringify(context.query),
