@@ -1,6 +1,6 @@
-import Head from 'next/head'
+import Head from "next/head";
 
-export default function Home() {
+function Home({ data }) {
   return (
     <div className="container">
       <Head>
@@ -13,9 +13,7 @@ export default function Home() {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
+        <p className="description">Server Side Data: {data.message}</p>
 
         <div className="grid">
           <a href="https://nextjs.org/docs" className="card">
@@ -54,8 +52,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className="logo" />
+          Powered by <img src="/vercel.svg" alt="Vercel" className="logo" />
         </a>
       </footer>
 
@@ -205,5 +202,17 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }
+
+// This gets called on every request
+export async function getServerSideProps(context) {
+  // Fetch data from external API
+  const data = await Promise.resolve({
+    message: JSON.stringify(context.query),
+  });
+  // Pass data to the page via props
+  return { props: { data } };
+}
+
+export default Home;
